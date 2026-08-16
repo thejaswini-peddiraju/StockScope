@@ -709,3 +709,80 @@ footer p {
   }
 
 }
+
+.search-section {
+  position: relative;
+}
+
+.search-results {
+  position: absolute;
+
+  top: 65px;
+  left: 0;
+  right: 0;
+
+  z-index: 100;
+
+  overflow: hidden;
+
+  border: 1px solid #26313c;
+  border-radius: 12px;
+
+  background: #0c1117;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.search-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 13px 17px;
+
+  border-bottom: 1px solid #18212a;
+
+  cursor: pointer;
+
+  transition: 0.15s;
+}
+
+.search-result:last-child {
+  border-bottom: none;
+}
+
+.search-result:hover {
+  background: #121b23;
+}
+
+.result-logo {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: rgba(52, 211, 153, 0.1);
+  color: #5ee8b2;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.search-result strong {
+  display: block;
+  color: #f4f7f8;
+  font-size: 12px;
+}
+
+.search-result small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #64717e;
+  font-size: 9px;
+}
