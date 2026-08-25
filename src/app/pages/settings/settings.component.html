@@ -1,0 +1,62 @@
+<div class="page">
+
+  <a routerLink="/" class="back-btn">← Back to Dashboard</a>
+
+  <header>
+    <h1>Settings</h1>
+    <p>Customize how StockScope looks and manage your account</p>
+  </header>
+
+  <section class="card">
+    <h2>Appearance</h2>
+
+    <div class="setting-row">
+      <div>
+        <strong>Theme</strong>
+        <span>Choose a light or dark interface</span>
+      </div>
+
+      <div class="toggle-group">
+        <button [class.active]="theme.mode === 'dark'" (click)="setMode('dark')">🌙 Dark</button>
+        <button [class.active]="theme.mode === 'light'" (click)="setMode('light')">☀️ Light</button>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <strong>Accent Color</strong>
+        <span>Used for highlights, buttons, and links</span>
+      </div>
+
+      <div class="swatches">
+        <button
+          *ngFor="let option of accentOptions"
+          class="swatch"
+          [class.active]="theme.accent === option.value"
+          [style.background]="option.swatch"
+          [title]="option.label"
+          (click)="setAccent(option.value)"
+        ></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" *ngIf="currentUser">
+    <h2>Account</h2>
+
+    <div class="setting-row">
+      <div>
+        <strong>{{ currentUser.name }}</strong>
+        <span>{{ currentUser.email }}</span>
+      </div>
+
+      <button class="logout-btn" (click)="logout()">Log Out</button>
+    </div>
+  </section>
+
+  <section class="card" *ngIf="!currentUser">
+    <h2>Account</h2>
+    <p class="hint">You're not logged in. <a routerLink="/login">Log in</a> to save preferences to your account.</p>
+  </section>
+
+</div>

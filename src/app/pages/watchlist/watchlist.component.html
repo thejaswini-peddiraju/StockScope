@@ -1,0 +1,40 @@
+<div class="page">
+
+  <a routerLink="/" class="back-btn">← Back to Dashboard</a>
+
+  <header>
+    <h1>My Watchlist</h1>
+    <p>Stocks you've saved for quick tracking</p>
+  </header>
+
+  <p class="state-message" *ngIf="loading">Loading your watchlist…</p>
+  <p class="state-message error" *ngIf="error">{{ error }}</p>
+
+  <p class="empty-state" *ngIf="!loading && !error && !stocks.length">
+    You haven't added any stocks yet. Star a stock from the dashboard or a stock's detail page to add it here.
+  </p>
+
+  <div class="list" *ngIf="!loading && stocks.length">
+    <div class="row" *ngFor="let item of stocks">
+
+      <div class="company" (click)="open(item.symbol)">
+        <div class="logo">{{ companyName(item.symbol).charAt(0) }}</div>
+        <div>
+          <strong>{{ item.quote?.name || companyName(item.symbol) }}</strong>
+          <small>{{ item.symbol }}</small>
+        </div>
+      </div>
+
+      <div class="price" *ngIf="item.quote">
+        <strong>₹{{ item.quote.price | number: '1.2-2' }}</strong>
+        <span [class.positive]="item.quote.changePercent >= 0" [class.negative]="item.quote.changePercent < 0">
+          {{ item.quote.changePercent >= 0 ? '+' : '' }}{{ item.quote.changePercent }}%
+        </span>
+      </div>
+
+      <button class="remove-btn" (click)="remove(item.symbol)">Remove</button>
+
+    </div>
+  </div>
+
+</div>

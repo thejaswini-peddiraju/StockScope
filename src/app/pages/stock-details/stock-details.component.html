@@ -1,0 +1,72 @@
+<div class="page">
+
+  <button class="back-btn" (click)="goBack()">← Back to Dashboard</button>
+
+  <div class="state-message" *ngIf="loading">Loading {{ symbol }}…</div>
+
+  <div class="state-message error" *ngIf="error">{{ error }}</div>
+
+  <ng-container *ngIf="!loading && !error && quote">
+
+    <header class="stock-header">
+      <div class="identity">
+        <div class="logo">{{ companyName().charAt(0) }}</div>
+        <div>
+          <h1>{{ quote.name || companyName() }}</h1>
+          <span class="symbol">{{ quote.symbol }}</span>
+        </div>
+        <button class="star-btn" [class.saved]="isSaved" (click)="toggleSave()">
+          {{ isSaved ? '★ Saved' : '☆ Add to Watchlist' }}
+        </button>
+      </div>
+
+      <div class="price-block">
+        <h2>₹{{ quote.price | number: '1.2-2' }}</h2>
+        <span [class.positive]="quote.changePercent >= 0" [class.negative]="quote.changePercent < 0">
+          {{ quote.change >= 0 ? '+' : '' }}{{ quote.change | number: '1.2-2' }}
+          ({{ quote.changePercent >= 0 ? '+' : '' }}{{ quote.changePercent }}%)
+        </span>
+      </div>
+    </header>
+
+    <p class="demo-note" *ngIf="usingFallbackData">
+      Showing demo data — live Alpha Vantage feed unavailable or quota exceeded right now.
+    </p>
+
+    <section class="chart-card">
+      <h3>Price history</h3>
+      <div class="chart-wrap">
+        <canvas #priceChart></canvas>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat">
+        <span>Open</span>
+        <strong>₹{{ quote.open | number: '1.2-2' }}</strong>
+      </div>
+      <div class="stat">
+        <span>Previous Close</span>
+        <strong>₹{{ quote.previousClose | number: '1.2-2' }}</strong>
+      </div>
+      <div class="stat">
+        <span>Day High</span>
+        <strong>₹{{ quote.high | number: '1.2-2' }}</strong>
+      </div>
+      <div class="stat">
+        <span>Day Low</span>
+        <strong>₹{{ quote.low | number: '1.2-2' }}</strong>
+      </div>
+      <div class="stat">
+        <span>Volume</span>
+        <strong>{{ quote.volume | number }}</strong>
+      </div>
+      <div class="stat">
+        <span>Last Trading Day</span>
+        <strong>{{ quote.latestTradingDay }}</strong>
+      </div>
+    </section>
+
+  </ng-container>
+
+</div>

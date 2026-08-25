@@ -1,0 +1,413 @@
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">↗</div>
+      <span>Stock<span>Scope</span></span>
+    </div>
+
+    <nav>
+
+      <p class="nav-title">MAIN</p>
+
+      <a class="nav-item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <span>⌂</span>
+        Dashboard
+      </a>
+
+      <a class="nav-item" routerLink="/explore" routerLinkActive="active">
+        <span>⌕</span>
+        Explore Stocks
+      </a>
+
+      <a class="nav-item" routerLink="/explore" routerLinkActive="active">
+        <span>↗</span>
+        Market Movers
+      </a>
+
+      <a class="nav-item" routerLink="/compare" routerLinkActive="active">
+        <span>⇄</span>
+        Compare
+      </a>
+
+      <p class="nav-title">MY MARKET</p>
+
+      <a class="nav-item" routerLink="/watchlist" routerLinkActive="active">
+        <span>☆</span>
+        Watchlist
+      </a>
+
+      <a class="nav-item" routerLink="/portfolio" routerLinkActive="active">
+        <span>▣</span>
+        Portfolio
+      </a>
+
+      <a class="nav-item" routerLink="/insights" routerLinkActive="active">
+        <span>◈</span>
+        Insights
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="nav-item" routerLink="/settings" routerLinkActive="active">
+        <span>⚙</span>
+        Settings
+      </a>
+
+      <div class="profile" *ngIf="currentUser">
+        <div class="avatar">{{ initialOf(currentUser.name) }}</div>
+        <div>
+          <strong>{{ currentUser.name }}</strong>
+          <small (click)="logout()" class="logout-link">Log out</small>
+        </div>
+      </div>
+
+      <div class="profile auth-links" *ngIf="!currentUser">
+        <a routerLink="/login" class="auth-link">Log In</a>
+        <a routerLink="/register" class="auth-link primary">Sign Up</a>
+      </div>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+
+      <div>
+        <h1>{{ currentUser ? 'Good morning, ' + currentUser.name.split(' ')[0] + ' 👋' : 'Good morning 👋' }}</h1>
+        <p>Here's what's happening in the market today.</p>
+      </div>
+
+      <div class="top-actions">
+
+        <button class="icon-btn">⌕</button>
+        <button class="icon-btn">♧</button>
+
+        <div class="market-status">
+          <span class="status-dot"></span>
+          Market Open
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- SEARCH -->
+    <section class="search-section">
+
+      <div class="search-box">
+
+        <span class="search-icon">⌕</span>
+
+        <input
+          type="text"
+          placeholder="Search company or stock symbol..."
+          [(ngModel)]="searchTerm"
+          (input)="searchStocks()"
+        />
+
+        <span class="search-shortcut">⌘ K</span>
+
+      </div>
+
+      <p class="search-hint" *ngIf="searching">Searching…</p>
+      <p class="search-hint error" *ngIf="searchError">{{ searchError }}</p>
+
+      <div class="search-results" *ngIf="searchTerm && filteredStocks.length">
+
+        <div
+          class="search-result"
+          *ngFor="let stock of filteredStocks"
+          (click)="openStock(stock.symbol)"
+        >
+
+          <div class="result-logo">
+            {{ initialOf(stock.name) }}
+          </div>
+
+          <div>
+            <strong>{{ stock.name }}</strong>
+            <small>{{ stock.symbol }} · {{ stock.region }}</small>
+          </div>
+
+        </div>
+
+      </div>
+
+      <p class="search-hint" *ngIf="searchTerm && !searching && !filteredStocks.length && !searchError">
+        No matches for "{{ searchTerm }}".
+      </p>
+
+    </section>
+
+
+    <!-- MARKET OVERVIEW -->
+    <section>
+
+      <div class="section-heading">
+
+        <div>
+          <h2>Market Overview</h2>
+          <p>Indian markets at a glance · sample index data</p>
+        </div>
+
+        <button class="view-btn" routerLink="/explore">
+          View Markets →
+        </button>
+
+      </div>
+
+
+      <div class="market-grid">
+
+        <div class="market-card">
+
+          <div class="card-top">
+            <span>NIFTY 50</span>
+            <span class="positive">+1.24%</span>
+          </div>
+
+          <h3>24,870.15</h3>
+
+          <p class="positive">▲ 304.20 today</p>
+
+          <div class="mini-chart positive-chart">
+            ╱╲__╱╲___╱╲
+          </div>
+
+        </div>
+
+
+        <div class="market-card">
+
+          <div class="card-top">
+            <span>SENSEX</span>
+            <span class="positive">+0.92%</span>
+          </div>
+
+          <h3>81,523.16</h3>
+
+          <p class="positive">▲ 742.10 today</p>
+
+          <div class="mini-chart positive-chart">
+            ╲╱╲___╱╲__╱
+          </div>
+
+        </div>
+
+
+        <div class="market-card">
+
+          <div class="card-top">
+            <span>NIFTY IT</span>
+            <span class="positive">+1.67%</span>
+          </div>
+
+          <h3>41,284.55</h3>
+
+          <p class="positive">▲ 678.30 today</p>
+
+          <div class="mini-chart positive-chart">
+            ╱__╲╱╲___╱
+          </div>
+
+        </div>
+
+
+        <div class="market-card">
+
+          <div class="card-top">
+            <span>NIFTY BANK</span>
+            <span class="negative">-0.34%</span>
+          </div>
+
+          <h3>55,102.40</h3>
+
+          <p class="negative">▼ 188.40 today</p>
+
+          <div class="mini-chart negative-chart">
+            ╲╱╲___╲╱__
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARKET MOVERS -->
+    <section class="content-section">
+
+      <div class="section-heading">
+
+        <div>
+          <h2>Market Movers</h2>
+          <p>Live quotes for today's watchlist, ranked by % change</p>
+        </div>
+
+        <button class="view-btn" routerLink="/explore">
+          Explore All →
+        </button>
+
+      </div>
+
+      <p class="search-hint" *ngIf="watchlistLoading">Loading live quotes…</p>
+      <p class="search-hint error" *ngIf="watchlistError">{{ watchlistError }}</p>
+      <p class="search-hint" *ngIf="usingFallbackData && !watchlistLoading">
+        Showing demo data — live feed unavailable right now.
+      </p>
+
+      <div class="movers-grid" *ngIf="!watchlistLoading && watchlist.length">
+
+        <!-- GAINERS -->
+
+        <div class="panel">
+
+          <div class="panel-title">
+            <div>
+              <h3>Top Gainers</h3>
+              <span>Today's strongest performers</span>
+            </div>
+
+            <span class="trend-icon positive">↗</span>
+          </div>
+
+          <div class="stock-row" *ngFor="let stock of topGainers" (click)="openStock(stock.symbol)">
+
+            <div class="company">
+              <div class="company-logo">{{ initialOf(companyName(stock.symbol)) }}</div>
+
+              <div>
+                <strong>{{ companyName(stock.symbol) }}</strong>
+                <small>{{ stock.symbol }}</small>
+              </div>
+            </div>
+
+            <div class="stock-price">
+              <strong>₹{{ stock.price | number: '1.2-2' }}</strong>
+              <span [class.positive]="stock.changePercent >= 0" [class.negative]="stock.changePercent < 0">
+                {{ stock.changePercent >= 0 ? '+' : '' }}{{ stock.changePercent }}%
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- LOSERS -->
+
+        <div class="panel">
+
+          <div class="panel-title">
+            <div>
+              <h3>Top Losers</h3>
+              <span>Stocks under pressure</span>
+            </div>
+
+            <span class="trend-icon negative">↘</span>
+          </div>
+
+          <div class="stock-row" *ngFor="let stock of topLosers" (click)="openStock(stock.symbol)">
+
+            <div class="company">
+              <div class="company-logo">{{ initialOf(companyName(stock.symbol)) }}</div>
+
+              <div>
+                <strong>{{ companyName(stock.symbol) }}</strong>
+                <small>{{ stock.symbol }}</small>
+              </div>
+            </div>
+
+            <div class="stock-price">
+              <strong>₹{{ stock.price | number: '1.2-2' }}</strong>
+              <span [class.positive]="stock.changePercent >= 0" [class.negative]="stock.changePercent < 0">
+                {{ stock.changePercent >= 0 ? '+' : '' }}{{ stock.changePercent }}%
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- FEATURED STOCKS -->
+
+    <section class="content-section">
+
+      <div class="section-heading">
+
+        <div>
+          <h2>Stocks to Watch</h2>
+          <p>Live quotes, refreshed on page load</p>
+        </div>
+
+        <button class="view-btn" routerLink="/explore">
+          See All →
+        </button>
+
+      </div>
+
+      <div class="watch-grid" *ngIf="!watchlistLoading">
+
+        <div class="watch-card" *ngFor="let stock of watchlist" (click)="openStock(stock.symbol)">
+
+          <div class="watch-header">
+            <div class="company-logo">{{ initialOf(companyName(stock.symbol)) }}</div>
+
+            <button class="star" [class.saved]="isSaved(stock.symbol)" (click)="toggleSave($event, stock.symbol)">
+              {{ isSaved(stock.symbol) ? '★' : '☆' }}
+            </button>
+          </div>
+
+          <h3>{{ companyName(stock.symbol) }}</h3>
+          <p>{{ stock.symbol }}</p>
+
+          <div class="watch-price">
+            ₹{{ stock.price | number: '1.2-2' }}
+            <span [class.positive]="stock.changePercent >= 0" [class.negative]="stock.changePercent < 0">
+              {{ stock.changePercent >= 0 ? '+' : '' }}{{ stock.changePercent }}%
+            </span>
+          </div>
+
+          <div class="score">
+            <span>Day Volume</span>
+            <strong>{{ stock.volume | number }}</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+      <div>
+        <strong>StockScope</strong>
+        <p>See the market. Understand the numbers.</p>
+      </div>
+
+      <span>© 2026 StockScope · Educational use only</span>
+
+    </footer>
+
+  </main>
+
+</div>

@@ -1,0 +1,23 @@
+<div class="page">
+
+  <a routerLink="/" class="back-btn">← Back to Dashboard</a>
+
+  <header>
+    <h1>Explore Stocks</h1>
+    <p>Browse all stocks supported by StockScope</p>
+  </header>
+
+  <p class="state-message" *ngIf="loading">Loading stocks…</p>
+  <p class="state-message error" *ngIf="error">{{ error }}</p>
+
+  <div class="grid" *ngIf="!loading && !error">
+    <div class="stock-card" *ngFor="let stock of stocks" (click)="open(stock.symbol)">
+      <div class="logo">{{ initialOf(stock.name) }}</div>
+      <div>
+        <strong>{{ stock.name }}</strong>
+        <small>{{ stock.symbol }} · {{ stock.sector }}</small>
+      </div>
+    </div>
+  </div>
+
+</div>

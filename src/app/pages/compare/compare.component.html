@@ -1,0 +1,82 @@
+<div class="page">
+
+  <a routerLink="/" class="back-btn">← Back to Dashboard</a>
+
+  <header>
+    <h1>Compare Stocks</h1>
+    <p>Add up to {{ maxCompare }} stocks to compare price performance and key stats</p>
+  </header>
+
+  <div class="search-box" *ngIf="compared.length < maxCompare">
+    <span class="search-icon">⌕</span>
+    <input
+      type="text"
+      placeholder="Search a stock to add to comparison..."
+      [(ngModel)]="searchTerm"
+      (input)="onSearchInput()"
+    />
+  </div>
+
+  <p class="hint" *ngIf="searching">Searching…</p>
+  <p class="hint error" *ngIf="error">{{ error }}</p>
+  <p class="hint" *ngIf="loadingSymbol">Loading {{ loadingSymbol }}…</p>
+
+  <div class="search-results" *ngIf="searchTerm && searchResults.length">
+    <div class="search-result" *ngFor="let r of searchResults" (click)="addStock(r)">
+      <div class="logo">{{ initialOf(r.name) }}</div>
+      <div>
+        <strong>{{ r.name }}</strong>
+        <small>{{ r.symbol }} · {{ r.region }}</small>
+      </div>
+    </div>
+  </div>
+
+  <p class="empty-state" *ngIf="!compared.length && !loadingSymbol">
+    Search and add stocks above to start comparing.
+  </p>
+
+  <div class="chips" *ngIf="compared.length">
+    <div class="chip" *ngFor="let c of compared; let i = index" [style.borderColor]="colors[i]">
+      <span class="dot" [style.background]="colors[i]"></span>
+      {{ companyName(c.symbol) }}
+      <button (click)="removeStock(c.symbol)">✕</button>
+    </div>
+  </div>
+
+  <section class="chart-card" *ngIf="compared.length">
+    <h3>Normalized price change (%)</h3>
+    <div class="chart-wrap">
+      <canvas #overlayChart></canvas>
+    </div>
+  </section>
+
+  <section class="compare-table" *ngIf="compared.length">
+    <div class="table-row header-row">
+      <div>Metric</div>
+      <div *ngFor="let c of compared">{{ companyName(c.symbol) }}</div>
+    </div>
+    <div class="table-row">
+      <div>Price</div>
+      <div *ngFor="let c of compared">₹{{ c.quote.price | number: '1.2-2' }}</div>
+    </div>
+    <div class="table-row">
+      <div>Change %</div>
+      <div *ngFor="let c of compared" [class.positive]="c.quote.changePercent >= 0" [class.negative]="c.quote.changePercent < 0">
+        {{ c.quote.changePercent >= 0 ? '+' : '' }}{{ c.quote.changePercent }}%
+      </div>
+    </div>
+    <div class="table-row">
+      <div>Day High</div>
+      <div *ngFor="let c of compared">₹{{ c.quote.high | number: '1.2-2' }}</div>
+    </div>
+    <div class="table-row">
+      <div>Day Low</div>
+      <div *ngFor="let c of compared">₹{{ c.quote.low | number: '1.2-2' }}</div>
+    </div>
+    <div class="table-row">
+      <div>Volume</div>
+      <div *ngFor="let c of compared">{{ c.quote.volume | number }}</div>
+    </div>
+  </section>
+
+</div>

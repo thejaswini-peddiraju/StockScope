@@ -1,0 +1,107 @@
+<div class="page">
+
+  <a routerLink="/" class="back-btn">← Back to Dashboard</a>
+
+  <header>
+    <h1>Portfolio</h1>
+    <p>Paper trading — practice with virtual cash, no real money involved</p>
+  </header>
+
+  <p class="state-message" *ngIf="loading">Loading your portfolio…</p>
+  <p class="state-message error" *ngIf="error">{{ error }}</p>
+
+  <ng-container *ngIf="!loading && portfolio">
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <span>Cash Available</span>
+        <strong>₹{{ portfolio.cash | number: '1.2-2' }}</strong>
+      </div>
+      <div class="summary-card">
+        <span>Holdings Value</span>
+        <strong>₹{{ portfolio.holdingsValue | number: '1.2-2' }}</strong>
+      </div>
+      <div class="summary-card">
+        <span>Total Portfolio Value</span>
+        <strong>₹{{ portfolio.totalValue | number: '1.2-2' }}</strong>
+      </div>
+      <div class="summary-card">
+        <span>Total P&amp;L</span>
+        <strong [class.positive]="portfolio.totalProfitLoss >= 0" [class.negative]="portfolio.totalProfitLoss < 0">
+          {{ portfolio.totalProfitLoss >= 0 ? '+' : '' }}₹{{ portfolio.totalProfitLoss | number: '1.2-2' }}
+        </strong>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Buy Stock</h2>
+
+      <div class="buy-form">
+        <div class="search-wrap">
+          <input
+            type="text"
+            placeholder="Search a stock..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchInput()"
+          />
+          <div class="search-results" *ngIf="searchResults.length">
+            <div class="search-result" *ngFor="let r of searchResults" (click)="selectStock(r)">
+              {{ r.name }} <small>{{ r.symbol }}</small>
+            </div>
+          </div>
+        </div>
+
+        <input type="number" min="1" [(ngModel)]="shareInput" class="shares-input" />
+
+        <button (click)="buy()" [disabled]="!selectedSymbol || submitting">
+          {{ submitting ? 'Buying…' : 'Buy' }}
+        </button>
+      </div>
+
+      <p class="action-message success" *ngIf="actionMessage">{{ actionMessage }}</p>
+      <p class="action-message error" *ngIf="actionError">{{ actionError }}</p>
+    </section>
+
+    <section class="card">
+      <h2>Holdings</h2>
+
+      <p class="empty-state" *ngIf="!portfolio.holdings.length">
+        You don't own any stocks yet. Buy your first one above.
+      </p>
+
+      <div class="holdings-list" *ngIf="portfolio.holdings.length">
+        <div class="holding-row" *ngFor="let h of portfolio.holdings">
+          <div class="name">
+            <strong>{{ companyName(h.symbol) }}</strong>
+            <small>{{ h.shares }} share{{ h.shares !== 1 ? 's' : '' }} · avg ₹{{ h.avgPrice | number: '1.2-2' }}</small>
+          </div>
+
+          <div class="value">
+            <strong>₹{{ h.currentValue | number: '1.2-2' }}</strong>
+            <small [class.positive]="h.profitLoss >= 0" [class.negative]="h.profitLoss < 0">
+              {{ h.profitLoss >= 0 ? '+' : '' }}₹{{ h.profitLoss | number: '1.2-2' }} ({{ h.profitLossPercent >= 0 ? '+' : '' }}{{ h.profitLossPercent }}%)
+            </small>
+          </div>
+
+          <button class="sell-btn" (click)="sell(h.symbol, h.shares)">Sell</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" *ngIf="portfolio.transactions.length">
+      <h2>Recent Transactions</h2>
+
+      <div class="tx-list">
+        <div class="tx-row" *ngFor="let tx of portfolio.transactions">
+          <span class="tx-type" [class.buy]="tx.type === 'buy'" [class.sell]="tx.type === 'sell'">
+            {{ tx.type === 'buy' ? 'Bought' : 'Sold' }}
+          </span>
+          <span>{{ tx.shares }} × {{ companyName(tx.symbol) }} &#64; ₹{{ tx.price | number: '1.2-2' }}</span>
+          <span class="tx-date">{{ tx.timestamp | date: 'MMM d, h:mm a' }}</span>
+        </div>
+      </div>
+    </section>
+
+  </ng-container>
+
+</div>

@@ -1,0 +1,36 @@
+<div class="card">
+
+  <div class="logo">
+    <div class="logo-icon">↗</div>
+    Stock<span style="color:#10b981">Scope</span>
+  </div>
+
+  <h1>Create your account</h1>
+  <p class="subtitle">Track stocks and build your own watchlist.</p>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <form (ngSubmit)="submit()">
+
+    <label>
+      Name
+      <input type="text" name="name" [(ngModel)]="name" placeholder="Your name" autocomplete="name" />
+    </label>
+
+    <label>
+      Email
+      <input type="email" name="email" [(ngModel)]="email" placeholder="you@example.com" autocomplete="email" />
+    </label>
+
+    <label>
+      Password
+      <input type="password" name="password" [(ngModel)]="password" placeholder="At least 6 characters" autocomplete="new-password" />
+    </label>
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Creating account…' : 'Sign Up' }}</button>
+
+  </form>
+
+  <p class="switch">Already have an account? <a routerLink="/login">Log in</a></p>
+
+</div>

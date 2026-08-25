@@ -1,0 +1,31 @@
+<div class="card">
+
+  <div class="logo">
+    <div class="logo-icon">↗</div>
+    Stock<span style="color:#10b981">Scope</span>
+  </div>
+
+  <h1>Welcome back</h1>
+  <p class="subtitle">Log in to save stocks to your watchlist.</p>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <form (ngSubmit)="submit()">
+
+    <label>
+      Email
+      <input type="email" name="email" [(ngModel)]="email" placeholder="you@example.com" autocomplete="email" />
+    </label>
+
+    <label>
+      Password
+      <input type="password" name="password" [(ngModel)]="password" placeholder="••••••••" autocomplete="current-password" />
+    </label>
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Logging in…' : 'Log In' }}</button>
+
+  </form>
+
+  <p class="switch">Don't have an account? <a routerLink="/register">Sign up</a></p>
+
+</div>

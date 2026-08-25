@@ -1,0 +1,48 @@
+<div class="page">
+
+  <a routerLink="/" class="back-btn">← Back to Dashboard</a>
+
+  <header>
+    <h1>Insights</h1>
+    <p>A summary of your watchlist and portfolio performance</p>
+  </header>
+
+  <p class="state-message" *ngIf="!isLoggedIn">
+    <a routerLink="/login">Log in</a> to see insights based on your watchlist and portfolio.
+  </p>
+
+  <ng-container *ngIf="isLoggedIn">
+
+    <p class="state-message" *ngIf="loading">Loading insights…</p>
+
+    <ng-container *ngIf="!loading">
+
+      <section class="card" *ngIf="watchlistQuotes.length">
+        <h2>Watchlist Performance</h2>
+        <p class="subtitle">% change today, across your saved stocks</p>
+        <div class="chart-wrap">
+          <canvas #watchlistChart></canvas>
+        </div>
+      </section>
+
+      <p class="empty-state" *ngIf="!watchlistQuotes.length">
+        Your watchlist is empty — star some stocks to see performance insights here.
+      </p>
+
+      <section class="card" *ngIf="portfolio && portfolio.holdings.length">
+        <h2>Portfolio Allocation</h2>
+        <p class="subtitle">Current value by holding</p>
+        <div class="chart-wrap donut">
+          <canvas #allocationChart></canvas>
+        </div>
+      </section>
+
+      <p class="empty-state" *ngIf="portfolio && !portfolio.holdings.length">
+        You don't own any stocks yet — buy some in Portfolio to see your allocation here.
+      </p>
+
+    </ng-container>
+
+  </ng-container>
+
+</div>
