@@ -918,7 +918,7 @@ This is functional but can later be replaced with a dedicated trading modal or i
 <br>
 
 <p align="center">
-  <img src="./docs/stockscope.gif" width="500" alt="StockScope Animation">
+  <img src="./docs/screenshots/stockscope.gif" width="500" alt="StockScope Animation">
 </p>
 
 <h2 align="center">
