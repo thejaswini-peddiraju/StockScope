@@ -1,151 +1,936 @@
-# StockScope 📈
+# 📈 StockScope
 
-A full-stack stock market analysis platform. Search for stocks, view live-ish quotes,
-and explore historical price movement on an interactive dashboard.
+<p align="center">
+  <strong>A Full-Stack Stock Market Analysis & Paper-Trading Platform</strong>
+</p>
 
-**Frontend:** Angular 19 (standalone components)
-**Backend:** Node.js + Express, integrating the [Alpha Vantage](https://www.alphavantage.co/) market data API
+<p align="center">
+  🔍 Search · 📊 Analyze · ⭐ Track · 🔄 Compare · 💰 Practice
+</p>
+
+<p align="center">
+
+![Angular](https://img.shields.io/badge/Angular-19-DD0031?style=for-the-badge\&logo=angular\&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge\&logo=node.js\&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge\&logo=express\&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge\&logo=chart.js\&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-purple?style=for-the-badge)
+
+</p>
 
 ---
 
-## What it does
+## 🌟 Overview
 
-- **Search** for stocks by name or symbol (debounced, live results as you type)
-- **Dashboard** showing live-quoted "Top Gainers", "Top Losers", and a watchlist of
-  Indian equities (BSE) and major US tickers
-- **Stock detail page** per symbol: current price, day's open/high/low/previous close,
-  volume, and a price-history line chart (Chart.js) over the last ~60 trading days
-- **User accounts**: register/login with JWT auth, passwords hashed with bcrypt
-- **Personal watchlist**: logged-in users can star any stock to save it, persisted
-  server-side per user
-- **Explore page**: browse all supported stocks
-- **Compare page**: add up to 3 stocks and see their normalized (% change) price
-  performance overlaid on one chart, plus a side-by-side stats table
-- **Portfolio (paper trading)**: buy/sell stocks with ₹1,00,000 in virtual cash,
-  track holdings, average cost, live profit/loss, and transaction history — real
-  money is never involved, this is a simulation for practice/demo purposes
-- **Insights**: charts summarizing your watchlist's daily performance and your
-  portfolio's allocation by holding
-- **Theming**: dark/light mode plus 4 accent colors, persisted per browser
-- Graceful **fallback to demo data** if the Alpha Vantage API key isn't configured or
-  its (very tight) free-tier rate limit is hit, so the app always demos cleanly —
-  see [Fallback data](#fallback-data) below
+**StockScope** is a full-stack stock market analysis platform built to make exploring, tracking, comparing, and practicing stock trading simple and interactive.
 
-## Architecture
+Users can search for stocks, view market movements, analyze historical prices, create personalized watchlists, compare multiple stocks, and practice buying and selling through a **paper-trading portfolio with ₹1,00,000 in virtual cash**.
 
+The application uses **Angular 19** for the frontend and **Node.js + Express** for the backend, with **Alpha Vantage** providing market data.
+
+> 💡 **No real money is involved.** The portfolio feature is a simulation designed for learning, experimentation, and demonstration.
+
+---
+
+## 🧭 Quick Navigation
+
+* [✨ Features](#-features)
+* [📸 Application Gallery](#-application-gallery)
+* [🏗️ Architecture](#️-architecture)
+* [🔄 How It Works](#-how-it-works)
+* [🛡️ Smart Fallback System](#️-smart-fallback-system)
+* [🔐 Authentication](#-authentication)
+* [💰 Paper Trading](#-paper-trading)
+* [🔌 API Endpoints](#-api-endpoints)
+* [🛠️ Tech Stack](#️-tech-stack)
+* [📁 Project Structure](#-project-structure)
+* [🚀 Running Locally](#-running-locally)
+* [🔒 Security](#-security)
+* [⚡ Performance & Reliability](#-performance--reliability)
+* [⚠️ Known Limitations](#️-known-limitations)
+* [🚧 Future Improvements](#-future-improvements)
+
+---
+
+# ✨ Features
+
+### 🔍 Smart Stock Search
+
+* Search stocks by company name or symbol
+* Debounced search results while typing
+* Supports Indian BSE equities and major US tickers
+* Example symbols:
+
+  * `RELIANCE.BSE`
+  * `TCS.BSE`
+  * `AAPL`
+  * `MSFT`
+
+---
+
+### 📊 Interactive Dashboard
+
+Get a quick overview of the market through:
+
+* 📈 Top Gainers
+* 📉 Top Losers
+* ⭐ Watchlist highlights
+* 🇮🇳 Indian equities
+* 🇺🇸 Major US stocks
+* 📌 Market overview cards
+
+---
+
+### 📈 Stock Details
+
+Each stock has a detailed view containing:
+
+* Current price
+* Day's open
+* Day's high
+* Day's low
+* Previous close
+* Trading volume
+* Historical closing prices
+* Interactive Chart.js price chart
+* Approximately 60 trading days of history
+
+---
+
+### ⭐ Personal Watchlist
+
+Logged-in users can:
+
+* Add stocks to their watchlist
+* Remove stocks
+* View saved stocks
+* Persist their watchlist across sessions
+* Manage their watchlist through protected API endpoints
+
+---
+
+### 🔄 Compare Stocks
+
+Compare up to **3 stocks simultaneously**.
+
+The comparison page provides:
+
+* 📊 Normalized percentage-change chart
+* 📈 Overlaid historical performance
+* 📋 Side-by-side statistics
+* 🔎 Easy visual comparison between stocks
+
+---
+
+### 💰 Paper Trading
+
+Practice trading without risking real money.
+
+Every new portfolio starts with:
+
+<h3 align="center">💵 ₹1,00,000 Virtual Cash</h3>
+
+Users can:
+
+* 🟢 Buy stocks
+* 🔴 Sell stocks
+* 📦 Track holdings
+* 💵 Monitor available cash
+* 📊 Calculate average cost
+* 📈 Track profit/loss
+* 🧾 View transaction history
+
+> ⚠️ This is a paper-trading simulation. It does not connect to a brokerage and does not involve real money.
+
+---
+
+### 📊 Portfolio Insights
+
+Visualize portfolio information through charts and statistics.
+
+Includes:
+
+* Portfolio allocation by holding
+* Watchlist daily performance
+* Current holding values
+* Profit/loss information
+* Recent transactions
+
+---
+
+### 🎨 Personalization
+
+StockScope includes:
+
+* 🌙 Dark mode
+* ☀️ Light mode
+* 🎨 4 accent colors
+* 💾 Theme preferences persisted per browser
+
+---
+
+### 🛡️ Demo-Friendly Fallback
+
+The application remains functional even when Alpha Vantage:
+
+* Reaches its free-tier request limit
+* Returns an API-level error
+* Is unavailable
+* Has no API key configured
+
+Instead of breaking the application, the backend automatically switches to demo data.
+
+---
+
+# 📸 Application Gallery
+
+> ✨ A visual tour of StockScope — from discovering stocks to analyzing and practicing trades.
+
+### 🖥️ Explore StockScope
+
+<p align="center">
+
+<a href="./docs/screenshots/1.jpg">
+<img src="./docs/screenshots/1.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/2.jpg">
+<img src="./docs/screenshots/2.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/3.jpg">
+<img src="./docs/screenshots/3.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/4.jpg">
+<img src="./docs/screenshots/4.jpg" width="300">
+</a>
+
+</p>
+
+<p align="center">
+
+<a href="./docs/screenshots/5.jpg">
+<img src="./docs/screenshots/5.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/6.jpg">
+<img src="./docs/screenshots/6.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/7.jpg">
+<img src="./docs/screenshots/7.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/8.jpg">
+<img src="./docs/screenshots/8.jpg" width="300">
+</a>
+
+</p>
+
+<p align="center">
+
+<a href="./docs/screenshots/9.jpg">
+<img src="./docs/screenshots/9.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/10.jpg">
+<img src="./docs/screenshots/10.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/11.jpg">
+<img src="./docs/screenshots/11.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/12.jpg">
+<img src="./docs/screenshots/12.jpg" width="300">
+</a>
+
+</p>
+
+<p align="center">
+
+<a href="./docs/screenshots/13.jpg">
+<img src="./docs/screenshots/13.jpg" width="300">
+</a>
+
+<a href="./docs/screenshots/14.jpg">
+<img src="./docs/screenshots/14.jpg" width="300">
+</a>
+
+</p>
+
+> 💡 **Click any screenshot to view it in full resolution.**
+
+---
+
+# 🏗️ Architecture
+
+```text
+                         👤 USER
+                           │
+                           ▼
+              ┌─────────────────────────┐
+              │    🅰️ Angular 19        │
+              │                         │
+              │ Dashboard               │
+              │ Explore                 │
+              │ Stock Details           │
+              │ Compare                 │
+              │ Watchlist               │
+              │ Portfolio               │
+              │ Insights                │
+              └────────────┬────────────┘
+                           │
+                       HTTP / JWT
+                           │
+                           ▼
+              ┌─────────────────────────┐
+              │   🚀 Express Backend    │
+              │                         │
+              │ REST API                │
+              │ Authentication          │
+              │ Watchlist               │
+              │ Portfolio               │
+              │ Cache                   │
+              │ Fallback Logic          │
+              └────────────┬────────────┘
+                           │
+                 ┌─────────┴─────────┐
+                 │                   │
+                 ▼                   ▼
+        ┌────────────────┐   ┌─────────────────┐
+        │ 📡 Alpha       │   │ 💾 JSON         │
+        │ Vantage        │   │ Persistence     │
+        │ Market Data    │   │                 │
+        └────────────────┘   │ Users           │
+                             │ Watchlists       │
+                             │ Portfolios       │
+                             └─────────────────┘
 ```
+
+### 🔑 Architecture Principle
+
+The frontend **never communicates directly with Alpha Vantage**.
+
+Instead:
+
+```text
+Angular
+   ↓
+Express API
+   ↓
+Cache / Alpha Vantage / Fallback Data
+   ↓
+Angular UI
+```
+
+This keeps the API key server-side while centralizing API requests, caching, error handling, and rate-limit management.
+
+---
+
+# 🔄 How It Works
+
+### 1️⃣ User Interaction
+
+The user interacts with the Angular application to search, analyze, compare, or trade stocks.
+
+⬇️
+
+### 2️⃣ Angular Frontend
+
+Angular sends requests to the Express backend.
+
+⬇️
+
+### 3️⃣ Express API
+
+The backend handles:
+
+* API routing
+* Authentication
+* JWT verification
+* Stock data requests
+* Watchlists
+* Portfolio operations
+* Caching
+* Fallback logic
+
+⬇️
+
+### 4️⃣ Data Retrieval
+
+The backend attempts to retrieve market data from Alpha Vantage.
+
+⬇️
+
+### 5️⃣ Cache / Fallback
+
+Previously retrieved data can be served from the in-memory cache.
+
+If live data is unavailable or the API quota is exceeded, the backend switches to fallback data.
+
+⬇️
+
+### 6️⃣ Frontend Visualization
+
+The processed data is returned to Angular and displayed through cards, tables, charts, and interactive components.
+
+---
+
+# 🛡️ Smart Fallback System
+
+One of StockScope's key design decisions is keeping the application **demo-ready even when the external API is unavailable**.
+
+### Normal Flow
+
+```text
+Angular
+   │
+   ▼
+Express Backend
+   │
+   ▼
+Alpha Vantage
+   │
+   ▼
+Cache
+   │
+   ▼
+Angular UI
+```
+
+### Fallback Flow
+
+```text
+Angular
+   │
+   ▼
+Express Backend
+   │
+   ├──────────────► Alpha Vantage ❌
+   │
+   ▼
+Fallback Dataset
+   │
+   ▼
+Angular UI ✅
+```
+
+### Fallback Features
+
+* Detects API errors
+* Checks the API response body for quota messages
+* Uses curated demo data for supported stocks
+* Generates stable synthetic prices for unknown symbols
+* Same symbol produces the same fallback price
+* Real API data is always preferred when available
+
+> 💡 **Result:** The application remains functional even when the free API quota is exhausted.
+
+---
+
+# 🔐 Authentication
+
+StockScope uses **JWT-based authentication** with bcrypt password hashing.
+
+### Registration
+
+```text
+User
+ │
+ ▼
+Register
+ │
+ ▼
+Password
+ │
+ ▼
+bcrypt Hash
+ │
+ ▼
+User Stored
+ │
+ ▼
+JWT Returned
+```
+
+### Login
+
+```text
+Credentials
+     │
+     ▼
+Express API
+     │
+     ▼
+bcrypt Verification
+     │
+     ▼
+JWT Generated
+     │
+     ▼
+Authenticated Session
+```
+
+Protected resources include:
+
+* User information
+* Watchlist
+* Portfolio
+* Buy transactions
+* Sell transactions
+
+The Angular authentication interceptor automatically attaches the JWT to protected requests.
+
+---
+
+# 💰 Paper Trading
+
+StockScope includes a simulated trading environment for practicing portfolio management.
+
+### Starting Balance
+
+<p align="center">
+  <strong>💵 ₹1,00,000 Virtual Cash</strong>
+</p>
+
+### Trading Flow
+
+```text
+Select Stock
+     │
+     ▼
+Choose Quantity
+     │
+     ▼
+Buy / Sell
+     │
+     ▼
+Portfolio Updated
+     │
+     ├── Cash Balance
+     ├── Holdings
+     ├── Average Cost
+     ├── Current Value
+     └── Profit / Loss
+```
+
+### Portfolio Tracks
+
+| Metric           | Description                      |
+| ---------------- | -------------------------------- |
+| 💵 Cash          | Remaining virtual balance        |
+| 📦 Holdings      | Stocks currently owned           |
+| 📊 Average Cost  | Average purchase price           |
+| 💰 Current Value | Current value of holdings        |
+| 📈 Profit/Loss   | Unrealized portfolio performance |
+| 🧾 Transactions  | Buy/sell history                 |
+
+> 🚫 No real brokerage integration
+> 🚫 No real money
+> ✅ Designed for simulation and learning
+
+---
+
+# 🔌 API Endpoints
+
+| Method   | Endpoint                        | Auth | Description                         |
+| -------- | ------------------------------- | :--: | ----------------------------------- |
+| `GET`    | `/api/health`                   |   —  | Server status and API configuration |
+| `GET`    | `/api/stocks/popular`           |   —  | List supported stocks               |
+| `GET`    | `/api/stocks/search?q=reliance` |   —  | Search stocks                       |
+| `GET`    | `/api/stocks/quote/:symbol`     |   —  | Current stock quote                 |
+| `GET`    | `/api/stocks/history/:symbol`   |   —  | Historical price data               |
+| `POST`   | `/api/auth/register`            |   —  | Create account                      |
+| `POST`   | `/api/auth/login`               |   —  | Login                               |
+| `GET`    | `/api/auth/me`                  |   ✓  | Get current user                    |
+| `GET`    | `/api/watchlist`                |   ✓  | Get user's watchlist                |
+| `POST`   | `/api/watchlist`                |   ✓  | Add stock to watchlist              |
+| `DELETE` | `/api/watchlist/:symbol`        |   ✓  | Remove stock                        |
+| `GET`    | `/api/portfolio`                |   ✓  | Get portfolio                       |
+| `POST`   | `/api/portfolio/buy`            |   ✓  | Buy shares                          |
+| `POST`   | `/api/portfolio/sell`           |   ✓  | Sell shares                         |
+
+---
+
+# 🌎 Supported Markets
+
+### 🇮🇳 Indian Equities
+
+Indian BSE stocks use the `.BSE` suffix.
+
+```text
+RELIANCE.BSE
+TCS.BSE
+INFY.BSE
+```
+
+### 🇺🇸 US Equities
+
+US stocks use their regular ticker symbols.
+
+```text
+AAPL
+MSFT
+GOOGL
+AMZN
+```
+
+---
+
+# 🛠️ Tech Stack
+
+### 🎨 Frontend
+
+* Angular 19
+* TypeScript
+* RxJS
+* Chart.js
+* Standalone Components
+
+### 🚀 Backend
+
+* Node.js
+* Express.js
+* REST APIs
+
+### 🔐 Security
+
+* JWT
+* bcrypt
+* Authentication middleware
+* Protected routes
+* Server-side API key handling
+
+### 📊 Market Data
+
+* Alpha Vantage API
+* In-memory TTL caching
+* Curated fallback dataset
+* Deterministic synthetic fallback prices
+
+### 💾 Persistence
+
+* JSON-file persistence
+* User data
+* Watchlists
+* Portfolio data
+* Transaction history
+
+---
+
+# 📁 Project Structure
+
+```text
 StockScope/
-├── src/                    # Angular frontend
-│   └── app/
-│       ├── pages/
-│       │   ├── dashboard/       # Search + market movers + watchlist
-│       │   ├── stock-details/   # Per-stock quote + price chart
-│       │   ├── explore/         # Browse all supported stocks
-│       │   ├── compare/         # Multi-stock comparison + overlay chart
-│       │   ├── watchlist/       # Logged-in user's saved stocks
-│       │   ├── login/, register/
-│       │   └── placeholder/     # Portfolio/Insights/Settings (not yet built)
-│       ├── services/
-│       │   ├── stock.service.ts      # HTTP client for stock data
-│       │   ├── auth.service.ts       # Login/register/session state
-│       │   └── watchlist.service.ts  # Saved-stocks CRUD
-│       ├── guards/auth.guard.ts      # Protects the Watchlist route
-│       └── interceptors/auth.interceptor.ts  # Attaches JWT to requests
-└── backend/                 # Express API server
-    └── src/
-        ├── server.js             # App entry point
-        ├── routes/
-        │   ├── stocks.js         # /api/stocks/* endpoints
-        │   ├── auth.js           # /api/auth/* — register, login, me
-        │   └── watchlist.js      # /api/watchlist/* — protected, per-user
-        ├── middleware/auth.js    # JWT verification middleware
-        ├── services/
-        │   ├── alphaVantage.js   # Alpha Vantage integration + fallback logic
-        │   ├── cache.js          # In-memory TTL cache (keeps within rate limits)
-        │   └── db.js             # JSON-file persistence for users/watchlists
-        └── data/fallbackStocks.js # Curated demo dataset used as a fallback
+│
+├── 📁 src/
+│   └── 📁 app/
+│       │
+│       ├── 📁 pages/
+│       │   ├── dashboard/
+│       │   ├── stock-details/
+│       │   ├── explore/
+│       │   ├── compare/
+│       │   ├── watchlist/
+│       │   ├── login/
+│       │   ├── register/
+│       │   └── placeholder/
+│       │
+│       ├── 📁 services/
+│       │   ├── stock.service.ts
+│       │   ├── auth.service.ts
+│       │   ├── portfolio.service.ts
+│       │   ├── theme.service.ts
+│       │   └── watchlist.service.ts
+│       │
+│       ├── 📁 guards/
+│       │   └── auth.guard.ts
+│       │
+│       └── 📁 interceptors/
+│           └── auth.interceptor.ts
+│
+├── 📁 backend/
+│   └── 📁 src/
+│       │
+│       ├── server.js
+│       │
+│       ├── 📁 routes/
+│       │   ├── stocks.js
+│       │   ├── auth.js
+│       │   ├── watchlist.js
+│       │   └── portfolio.js
+│       │
+│       ├── 📁 middleware/
+│       │   └── auth.js
+│       │
+│       ├── 📁 services/
+│       │   ├── alphaVantage.js
+│       │   ├── cache.js
+│       │   └── db.js
+│       │
+│       └── 📁 data/
+│           └── fallbackStocks.js
+│
+├── 📁 docs/
+│   ├── 📁 screenshots/
+│   │   ├── 1.jpg
+│   │   ├── 2.jpg
+│   │   ├── ...
+│   │   └── 14.jpg
+│   │
+│   └── stockscope.gif
+│
+├── .gitignore
+├── package.json
+└── README.md
 ```
 
-The frontend never calls Alpha Vantage directly — it talks to the Express backend,
-which handles the third-party API call, caching, and fallback logic. This keeps the
-API key server-side (never exposed to the browser) and centralizes rate-limit handling.
+---
 
-## API endpoints
+# 🚀 Running Locally
 
-| Method | Endpoint                        | Auth required | Description                          |
-|--------|----------------------------------|:---:|---------------------------------------|
-| GET    | `/api/health`                   |  | Server status + whether a live API key is configured |
-| GET    | `/api/stocks/popular`           |  | Browsable list of supported stocks |
-| GET    | `/api/stocks/search?q=reliance` |  | Search stocks by name or symbol      |
-| GET    | `/api/stocks/quote/:symbol`     |  | Current quote for a symbol           |
-| GET    | `/api/stocks/history/:symbol`   |  | Daily closing price history (~60 days) |
-| POST   | `/api/auth/register`            |  | Create an account, returns a JWT |
-| POST   | `/api/auth/login`               |  | Log in, returns a JWT |
-| GET    | `/api/auth/me`                  | ✓ | Current user info |
-| GET    | `/api/watchlist`                | ✓ | Get the logged-in user's saved symbols |
-| POST   | `/api/watchlist`                | ✓ | Add a symbol `{ symbol }` |
-| DELETE | `/api/watchlist/:symbol`        | ✓ | Remove a symbol |
-| GET    | `/api/portfolio`                | ✓ | Cash, holdings, current values, P&L, recent transactions |
-| POST   | `/api/portfolio/buy`            | ✓ | Buy shares `{ symbol, shares }` |
-| POST   | `/api/portfolio/sell`           | ✓ | Sell shares `{ symbol, shares }` |
+## Prerequisites
 
-Indian equities use the `.BSE` suffix (e.g. `RELIANCE.BSE`); US tickers are used as-is
-(e.g. `AAPL`).
+Make sure you have:
 
-## Running locally
+* Node.js
+* npm
+* Angular CLI
+* Alpha Vantage API key *(optional)*
 
-**1. Backend**
+---
+
+## 1️⃣ Clone the Repository
+
+```bash
+git clone <your-repository-url>
+cd StockScope
+```
+
+---
+
+## 2️⃣ Start the Backend
 
 ```bash
 cd backend
 npm install
+```
+
+Create the environment file:
+
+```bash
 cp .env.example .env
-# Add a free Alpha Vantage API key to .env (optional — the app works without one,
-# using demo data instead)
-# Also set a JWT_SECRET (any long random string) — used to sign login tokens
+```
+
+Add your configuration:
+
+```env
+ALPHA_VANTAGE_API_KEY=your_api_key
+JWT_SECRET=your_long_random_secret
+```
+
+The Alpha Vantage API key is optional.
+
+If it isn't configured, StockScope automatically uses demo data.
+
+Start the backend:
+
+```bash
 npm start
 ```
 
-Runs on `http://localhost:5000`.
+Backend:
 
-**2. Frontend**
+```text
+http://localhost:5000
+```
+
+---
+
+## 3️⃣ Start the Frontend
+
+Open a new terminal:
 
 ```bash
 npm install
 ng serve
 ```
 
-Runs on `http://localhost:4200` and talks to the backend at `localhost:5000` (see
-`src/environments/environment.ts`).
+Frontend:
 
-## Fallback data
+```text
+http://localhost:4200
+```
 
-Alpha Vantage's free tier allows only **25 requests/day**, which is easy to exhaust
-during development or a live demo. Rather than let the app break once the quota is
-hit, every backend route falls back to demo data. For the 12 curated stocks in
-`backend/src/data/fallbackStocks.js`, this uses realistic hand-picked base prices.
-For any *other* symbol (e.g. one surfaced by a live search that Alpha Vantage's
-quota then can't quote), the fallback generates a stable synthetic price instead of
-failing outright — same symbol always gets the same fallback price, computed from
-a hash of the symbol string, not re-randomized on every request. Real API data is
-always preferred when available; the API's own response body (not just HTTP status)
-is checked for quota/error messages, since Alpha Vantage returns `HTTP 200` even
-when the quota is exceeded.
+The Angular application communicates with the backend through the configured environment API URL.
 
-## Known limitations
+---
 
-- Market index cards (NIFTY 50, SENSEX, etc.) on the dashboard are static sample
-  values — Alpha Vantage's free tier doesn't provide Indian index data.
-- Alpha Vantage's `SYMBOL_SEARCH` endpoint is US-market-biased; Indian BSE symbol
-  search results can be inconsistent depending on the query.
-- User accounts, watchlists, and portfolios are persisted to JSON files on disk
-  (`backend/data/`), not a full database — fine for a portfolio project, not for
-  production scale.
-- Portfolio is a paper-trading simulation only — no real brokerage integration,
-  no real money.
-- Selling shares currently uses a browser `prompt()` for the quantity — functional
-  but a placeholder for a proper modal/inline form.
+# 🔒 Security
 
-## Tech stack
+The Alpha Vantage API key is **never exposed to the browser**.
 
-Angular 19 · TypeScript · RxJS · Chart.js · Node.js · Express · JWT · bcrypt · Alpha Vantage API
+```text
+Browser
+   │
+   ▼
+Angular
+   │
+   ▼
+Express Backend
+   │
+   ▼
+Alpha Vantage
+```
+
+The backend handles the external API communication.
+
+This provides:
+
+* 🔐 API key protection
+* 🛡️ Centralized authentication
+* ⚡ Centralized caching
+* 🚦 Rate-limit handling
+* 🔄 Fallback handling
+
+> **Never commit `.env` files or API keys to GitHub.**
+
+---
+
+# ⚡ Performance & Reliability
+
+StockScope uses an **in-memory TTL cache** to reduce repeated requests to Alpha Vantage.
+
+```text
+Request
+   │
+   ▼
+Is data cached?
+   │
+ ┌─┴──────────────┐
+ │                │
+Yes              No
+ │                │
+ ▼                ▼
+Return          Alpha Vantage
+Cached Data        │
+                   ▼
+                Cache Data
+                   │
+                   ▼
+                Return Data
+```
+
+This helps:
+
+* Reduce API requests
+* Stay within free-tier limits
+* Improve repeated request performance
+* Provide a smoother user experience
+
+---
+
+# ⚠️ Known Limitations
+
+### 📌 Market Indices
+
+Market index cards such as NIFTY 50 and SENSEX currently use static sample values because the Alpha Vantage free tier does not provide the required Indian index data.
+
+### 📌 Indian Stock Search
+
+Alpha Vantage's `SYMBOL_SEARCH` endpoint is primarily US-market oriented, so searches for Indian BSE stocks may sometimes be inconsistent.
+
+### 📌 JSON Persistence
+
+Users, watchlists, and portfolio information are stored in:
+
+```text
+backend/data/
+```
+
+This is suitable for a portfolio/demo project but is not intended for production-scale deployment.
+
+### 📌 Paper Trading
+
+The portfolio system is a simulation only.
+
+There is:
+
+* No brokerage integration
+* No real-money trading
+* No exchange order execution
+
+### 📌 Sell Interface
+
+Selling currently uses a browser `prompt()` to collect the number of shares.
+
+This is functional but can later be replaced with a dedicated trading modal or inline form.
+
+---
+
+# 🚧 Future Improvements
+
+* [ ] Replace JSON persistence with PostgreSQL or MongoDB
+* [ ] Add real-time WebSocket-based market updates
+* [ ] Improve Indian market symbol search
+* [ ] Add technical indicators
+* [ ] Add candlestick charts
+* [ ] Add portfolio performance history
+* [ ] Add transaction filtering
+* [ ] Replace browser `prompt()` with a custom trading modal
+* [ ] Improve mobile responsiveness
+* [ ] Add automated backend tests
+* [ ] Deploy frontend and backend to the cloud
+* [ ] Add additional market-data providers
+
+---
+
+# 🎯 Project Highlights
+
+| Feature           | Implementation                    |
+| ----------------- | --------------------------------- |
+| 🖥️ Frontend      | Angular 19                        |
+| ⚙️ Backend        | Node.js + Express                 |
+| 📊 Charts         | Chart.js                          |
+| 📡 Market Data    | Alpha Vantage                     |
+| 🔐 Authentication | JWT + bcrypt                      |
+| ⭐ Watchlist       | Server-side persistence           |
+| 💰 Trading        | Paper trading                     |
+| 💵 Starting Cash  | ₹1,00,000                         |
+| ⚡ Caching         | In-memory TTL                     |
+| 🛡️ Fallback      | Curated + deterministic demo data |
+| 🎨 Themes         | Dark / Light + 4 accent colors    |
+| 💾 Persistence    | JSON files                        |
+
+---
+
+# ❤️ Built With
+
+<p align="center">
+
+<strong>Angular</strong> · <strong>TypeScript</strong> · <strong>RxJS</strong> · <strong>Chart.js</strong><br> <strong>Node.js</strong> · <strong>Express</strong> · <strong>JWT</strong> · <strong>bcrypt</strong><br> <strong>Alpha Vantage</strong> · <strong>REST APIs</strong> · <strong>JSON Persistence</strong>
+
+</p>
+
+<br>
+
+<p align="center">
+  <img src="./docs/stockscope.gif" width="500" alt="StockScope Animation">
+</p>
+
+<h2 align="center">
+  📈 Explore. Analyze. Compare. Trade.
+</h2>
+
+<p align="center">
+  <i>StockScope — your market, your insights, your move.</i>
+</p>
+
+<br>
+
+<p align="center">
+  ⭐ If you found this project interesting, consider giving it a star!
+</p>
